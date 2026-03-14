@@ -1,0 +1,31 @@
+name: Update Install Scripts
+
+on:
+  repository_dispatch:
+    types: [update-install-script]
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    name: Update FineType install script
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Decode and write install script
+        run: |
+          echo "${{ github.event.client_payload.script_base64 }}" | base64 -d > finetype.sh
+          mkdir -p finetype
+          cp finetype.sh finetype/index.html
+          echo "Updated from ${{ github.event.client_payload.repo }} @ ${{ github.event.client_payload.tag }}"
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add finetype.sh finetype/index.html
+          git diff --staged --quiet && echo "No changes" && exit 0
+          git commit -m "Update finetype install script from ${{ github.event.client_payload.tag }}"
+          git push
