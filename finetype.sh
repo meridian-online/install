@@ -233,7 +233,7 @@ main() {
   echo "                ☼☼☼☼☼☼☼☼      "
   echo "                 ☼☼☼☼         "
   echo ""
-  echo "          MERIDIAN"
+  echo "            MERIDIAN"
   echo ""
   echo "  FineType installer"
   echo ""
