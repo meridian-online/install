@@ -215,6 +215,36 @@ print_path_help() {
 }
 
 # ---------------------------------------------------------------------------
+# Runtime dependency check
+# ---------------------------------------------------------------------------
+
+check_duckdb() {
+  # DuckDB is a runtime dependency: `finetype profile` and `validate` read and
+  # write data through it. Not needed to install finetype, so warn rather than
+  # fail.
+  if command -v duckdb &>/dev/null; then
+    return
+  fi
+
+  echo ""
+  warn "DuckDB not found on your PATH."
+  echo ""
+  info "FineType reads and writes data through DuckDB — 'finetype profile' and"
+  info "'finetype validate' need it. Install it before profiling your data:"
+  echo ""
+
+  local os
+  os="$(uname -s)"
+  case "${os}" in
+    Darwin) info "  brew install duckdb" ;;
+    Linux)  info "  curl https://install.duckdb.org | sh" ;;
+    *)      info "  see https://duckdb.org/docs/installation" ;;
+  esac
+
+  echo ""
+}
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -274,6 +304,7 @@ main() {
   fi
 
   print_path_help
+  check_duckdb
 }
 
 main "$@"
