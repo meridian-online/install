@@ -15,6 +15,7 @@ Each tool gets its own path:
 | Path | Source repo | Script |
 |------|------------|--------|
 | `/finetype` | [meridian-online/finetype](https://github.com/meridian-online/finetype) | `scripts/install.sh` |
+| `/brightfield` | [meridian-online/brightfield](https://github.com/meridian-online/brightfield) | `brightfield.sh` |
 
 ## Usage
 
@@ -24,6 +25,9 @@ curl -fsSL https://install.meridian.online/finetype | bash
 
 # Install specific version
 curl -fsSL https://install.meridian.online/finetype | bash -s -- v0.6.11
+
+# Install Brightfield (macOS only — Apple silicon and Intel)
+curl -fsSL https://install.meridian.online/brightfield | bash
 ```
 
 ## Deployment
