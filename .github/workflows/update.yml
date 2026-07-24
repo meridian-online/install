@@ -9,23 +9,46 @@ permissions:
 
 jobs:
   update:
-    name: Update FineType install script
+    name: Update ${{ matrix.tool }} install script
     runs-on: ubuntu-latest
+    strategy:
+      # One leg per onboarded tool. A dispatch acts on exactly the leg whose
+      # `repo` matches client_payload.repo; every other leg is inert (its steps
+      # are skipped). Onboarding a tool = add a row here plus its serving routes
+      # (_redirects / _headers / README) — nothing else.
+      matrix:
+        include:
+          - tool: finetype
+            repo: meridian-online/finetype
+          - tool: brightfield
+            repo: meridian-online/brightfield
     steps:
       - uses: actions/checkout@v4
 
       - name: Decode and write install script
+        if: github.event.client_payload.repo == matrix.repo
+        env:
+          # The write target is matrix.tool (a trusted constant), never the
+          # payload — the dispatch chooses which tool to fire, not where files land.
+          TOOL: ${{ matrix.tool }}
+          SCRIPT_BASE64: ${{ github.event.client_payload.script_base64 }}
+          REPO: ${{ github.event.client_payload.repo }}
+          TAG: ${{ github.event.client_payload.tag }}
         run: |
-          echo "${{ github.event.client_payload.script_base64 }}" | base64 -d > finetype.sh
-          mkdir -p finetype
-          cp finetype.sh finetype/index.html
-          echo "Updated from ${{ github.event.client_payload.repo }} @ ${{ github.event.client_payload.tag }}"
+          echo "$SCRIPT_BASE64" | base64 -d > "$TOOL.sh"
+          mkdir -p "$TOOL"
+          cp "$TOOL.sh" "$TOOL/index.html"
+          echo "Updated $TOOL from $REPO @ $TAG"
 
       - name: Commit and push
+        if: github.event.client_payload.repo == matrix.repo
+        env:
+          TOOL: ${{ matrix.tool }}
+          TAG: ${{ github.event.client_payload.tag }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add finetype.sh finetype/index.html
+          git add "$TOOL.sh" "$TOOL/index.html"
           git diff --staged --quiet && echo "No changes" && exit 0
-          git commit -m "Update finetype install script from ${{ github.event.client_payload.tag }}"
+          git commit -m "Update $TOOL install script from $TAG"
           git push
