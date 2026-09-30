@@ -1,0 +1,3 @@
+# install's allowlist for the public-hygiene gate.
+# Format: <tracked/file/path> | <exact offending text> | <why this is legitimate>
+# Blank lines and whole-line # comments are ignored.
