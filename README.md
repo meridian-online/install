@@ -58,3 +58,5 @@ Onboarding a second tool needs three things:
    leg is inert. Onboarding a tool means adding a `{ tool, repo }` row to the matrix, then the
    serving routes (`_redirects`, `_headers`) and a row in the table above. No payload change is
    needed — the dispatch already sends `repo` (`${GITHUB_REPOSITORY}`), which selects the leg.
+
+Test line: blocked on task-42 today
