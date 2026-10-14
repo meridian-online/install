@@ -16,6 +16,7 @@ Each tool gets its own path:
 |------|------------|--------|
 | `/finetype` | [meridian-online/finetype](https://github.com/meridian-online/finetype) | `scripts/install.sh` |
 | `/brightfield` | [meridian-online/brightfield](https://github.com/meridian-online/brightfield) | `brightfield.sh` |
+| `/arc` | [meridian-online/arcform](https://github.com/meridian-online/arcform) | `scripts/install.sh` |
 
 ## Usage
 
@@ -28,6 +29,12 @@ curl -fsSL https://install.meridian.online/finetype | bash -s -- v0.6.11
 
 # Install Brightfield (macOS only — Apple silicon and Intel)
 curl -fsSL https://install.meridian.online/brightfield | bash
+
+# Install Arc (macOS and Linux; no Windows build)
+curl -fsSL https://install.meridian.online/arc | bash
+
+# Install a specific Arc version
+curl -fsSL https://install.meridian.online/arc | bash -s -- v0.2.0
 ```
 
 ## Deployment
@@ -47,8 +54,9 @@ Onboarding a second tool needs three things:
    asset — see any [finetype release](https://github.com/meridian-online/finetype/releases)
    for the canonical set (5 targets: macOS x86_64/aarch64, Linux x86_64/aarch64, Windows
    x86_64-msvc). Without this, `curl | bash` has nothing to download or checksum-verify.
-   *(As of now, arcform and dovetail have no published releases, so there is nothing to
-   onboard yet.)*
+   *(arcform follows this convention for four targets, macOS arm64 and x86_64 and Linux
+   x86_64 and aarch64, with no Windows build; its release workflow dispatches from its first
+   tag, v0.2.0. dovetail has no published releases yet, so there is nothing to onboard.)*
 2. **A dispatch from the tool's release workflow.** On tag, base64 the generated script and
    `repository_dispatch` it here with type `update-install-script` and a payload of
    `{ script_base64, repo, tag }` — exactly as finetype's `release.yml` does.

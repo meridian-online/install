@@ -22,6 +22,8 @@ jobs:
             repo: meridian-online/finetype
           - tool: brightfield
             repo: meridian-online/brightfield
+          - tool: arc
+            repo: meridian-online/arcform
     steps:
       - uses: actions/checkout@v4
 
