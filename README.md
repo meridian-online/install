@@ -66,3 +66,6 @@ Onboarding a tool needs three things:
    leg is inert. Onboarding a tool means adding a `{ tool, repo }` row to the matrix, then the
    serving routes (`_redirects`, `_headers`) and a row in the table above. No payload change is
    needed — the dispatch already sends `repo` (`${GITHUB_REPOSITORY}`), which selects the leg.
+   Each `_headers` rule for a script path (the `.sh`, bare and trailing-slash forms) sets both
+   `Content-Type: text/plain; charset=utf-8` and `X-Robots-Tag: noindex`: the scripts are not
+   pages, and the noindex keeps search engines from listing them as pages they declined.
